@@ -1,7 +1,7 @@
 ; ===== Pixel move U/D/L/R: one step per press =====
 ; X = current offset on page $0200
 ; Y = prevPressed flag (0 = no, 1 = yes)
-; Joypad bits: Up=bit0, Down=bit1, Left=bit2, Right=bit3
+; Joypad/keyboard bits: Up=bit0, Down=bit1, Left=bit2, Right=bit3
 
 .ORG $8000
 
