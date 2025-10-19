@@ -79,5 +79,8 @@ Questo mantiene il pixel sulla stessa riga, simulando il wrap laterale.
    Compilazione (necroassembler):
    python -m necroassembler.cpu.mos6502 main.asm main.bin
 
-   Progetto didattico - Movimento pixel in Assembly MOS 6502
+Compilazione con necroassembler:
+python -m necroassembler.cpu.mos6502 main.asm main.bin
+
+ Progetto didattico - Movimento pixel in Assembly MOS 6502
 --------------------------------------------------------------
