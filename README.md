@@ -1,85 +1,85 @@
 # NES-Style Pixel Movement in 6502 Assembly
 
-Un piccolo esercizio didattico in Assembly MOS 6502 che mostra come muovere un “pixel” (una cella di memoria) usando il joypad.
+A small educational exercise in MOS 6502 Assembly that demonstrates how to move a “pixel” (a memory cell) using the joypad.
 
-Include: movimento Up/Down/Left/Right, edge-detection (una sola mossa per pressione) e effetto Pac-Man orizzontale (wrap sulla stessa riga).
+Includes: Up/Down/Left/Right movement, edge detection (one move per press), and a horizontal Pac-Man effect (wrap on the same row).
 
 ---
 
-## Struttura generale
+## General Structure
 
-| Sezione | Descrizione |
+| Section | Description |
 |----------|-------------|
-| `.ORG $8000` | punto di partenza del programma |
-| `start:` | inizializza i registri e accende il primo pixel |
-| `loop:` | ciclo principale: legge il joypad e decide se muovere |
-| `chk_up/down/left/right:` | controllano ogni direzione |
-| `nmi`, `break` | routine vuote per gli interrupt |
-| vettori a `$FFFA` | indirizzi di NMI / RESET / IRQ |
+| `.ORG $8000` | program starting point |
+| `start:` | initializes registers and lights up the first pixel |
+| `loop:` | main loop: reads the joypad and decides whether to move |
+| `chk_up/down/left/right:` | check each direction |
+| `nmi`, `break` | empty interrupt routines |
+| vectors at `$FFFA` | NMI / RESET / IRQ addresses |
 
 ---
 
-## Logica di movimento
+## Movement Logic
 
-- **X**: posizione corrente del pixel (offset dentro la page `$0200`)
-- **Y**: flag di edge detection  
-  - `0`: nessun tasto era premuto, permetti movimento  
-  - `1`: tasto già premuto, blocca finché non rilasci
-- **$4000**: byte con lo stato dei pulsanti  
+- **X**: current pixel position (offset inside page `$0200`)  
+- **Y**: edge detection flag  
+  - `0`: no key pressed, allow movement  
+  - `1`: key already pressed, block until release  
+- **$4000**: byte containing button states  
   - bit0 = Up  
   - bit1 = Down  
   - bit2 = Left  
   - bit3 = Right  
 
-Ogni volta che premi un tasto:
-1. spegne il pixel nella posizione attuale  
-2. aggiorna X (incrementa/decrementa di 1 o di 16)  
-3. accende il pixel nella nuova posizione  
-4. imposta `Y=1` per bloccare ripetizioni finché non rilasci  
+Each time you press a button:
+1. turns off the pixel at the current position  
+2. updates X (increments/decrements by 1 or by 16)  
+3. lights up the pixel at the new position  
+4. sets `Y=1` to block repeated input until release  
 
 ---
 
-## Istruzioni principali del 6502 utilizzate
+## 6502 Instructions Used
 
-| Istruzione | Significato | Esempio d’uso |
-|-------------|--------------|----------------|
-| `LDA` | Load Accumulator | carica un valore in A |
-| `STA` | Store Accumulator | salva A in memoria |
-| `AND` | AND logico (bitmask) | `AND #%00000010` isola il bit Down |
-| `BEQ` / `BNE` | salta se Zero=1 / Zero=0 | usato dopo AND o CPY |
-| `CPY` | confronta Y con valore | per controllare il flag di pressione |
-| `INX` / `DEX` | incrementa/decrementa X | spostamento orizzontale |
-| `TXA` / `TAX` | trasferisce X↔A | serve per fare operazioni aritmetiche su X |
-| `CLC` / `SEC` | clear/set carry | prepara ADC o SBC |
-| `ADC` / `SBC` | somma/sottrai con carry | movimento verticale (±16) |
-| `RTI` | ritorna da interrupt | routine vuote per NMI/IRQ |
+| Instruction | Meaning | Example Use |
+|--------------|----------|-------------|
+| `LDA` | Load Accumulator | loads a value into A |
+| `STA` | Store Accumulator | stores A into memory |
+| `AND` | Logical AND (bitmask) | `AND #%00000010` isolates the Down bit |
+| `BEQ` / `BNE` | branch if Zero=1 / Zero=0 | used after AND or CPY |
+| `CPY` | compare Y with value | used to check the press flag |
+| `INX` / `DEX` | increment/decrement X | horizontal movement |
+| `TXA` / `TAX` | transfer X↔A | needed for arithmetic operations on X |
+| `CLC` / `SEC` | clear/set carry | prepares ADC or SBC |
+| `ADC` / `SBC` | add/subtract with carry | vertical movement (±16) |
+| `RTI` | return from interrupt | empty routines for NMI/IRQ |
 
 ---
 
-## Effetto Pac-Man orizzontale
+## Horizontal Pac-Man Effect
 
-Quando X supera la 16ª colonna (o torna sotto 0):
+When X exceeds the 16th column (or goes below 0):
 
-- Destra: se `(X & $0F) == 0` allora `X = X - 16`
-- Sinistra: se `(X & $0F) == 15` allora `X = X + 16`
+- Right: if `(X & $0F) == 0` then `X = X - 16`
+- Left: if `(X & $0F) == 15` then `X = X + 16`
 
-Questo mantiene il pixel sulla stessa riga, simulando il wrap laterale.
+This keeps the pixel on the same row, simulating horizontal wrap-around.
 
 ---
 
 --------------------------------------------------------------
-   Riassunto del comportamento
-   ---------------------------
+   Behavior Summary
+   ----------------
 
-   Avvio:              primo pixel acceso in $0200
-   Premi un tasto:     spostamento di 1 (Left/Right) o 16 (Up/Down)
-   Rilascio:           puoi muoverti di nuovo
-   Bordi orizzontali:  il pixel riappare dall’altro lato della stessa riga
+   Start:              first pixel lit at $0200  
+   Press a key:         move by 1 (Left/Right) or 16 (Up/Down)  
+   Release:             allows movement again  
+   Horizontal edges:    pixel reappears on the opposite side of the same row  
 
-   Compilazione (necroassembler):
+   Compilation (necroassembler):  
    python -m necroassembler.cpu.mos6502 main.asm main.bin
 
-Compilazione con necroassembler:
+Compilation with necroassembler:  
 python -m necroassembler.cpu.mos6502 main.asm main.bin
 
-Progetto puramente didattico per comprendere i registri, le operazioni logiche e i vettori del processore MOS 6502.
+Purely educational project to understand the registers, logical operations, and vector handling of the MOS 6502 processor.
