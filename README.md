@@ -66,6 +66,13 @@ When X exceeds the 16th column (or goes below 0):
 This keeps the pixel on the same row, simulating horizontal wrap-around.
 
 ---
+## Sources
+
+- [NesDev Wiki – 6502 CPU Architecture](https://www.nesdev.org/wiki/CPU)
+- [NesDev Wiki – Controller Reading](https://www.nesdev.org/wiki/Controller_reading)
+- [MOS 6502 Instruction Set Reference](https://www.masswerk.at/6502/6502_instruction_set.html)
+- [PyNecroassembler Project](https://pypi.org/project/necroassembler/)
+- [Programming the 6502 – Easy 8-bit Assembly Guide](https://skilldrick.github.io/easy6502/)
 
 --------------------------------------------------------------
    Behavior Summary
