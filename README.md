@@ -67,6 +67,17 @@ Questo mantiene il pixel sulla stessa riga, simulando il wrap laterale.
 
 ---
 
-## Vettori di interrupt
+--------------------------------------------------------------
+   Riassunto del comportamento
+   ---------------------------
 
-Il 6502, all’accensione, legge questi indirizzi:
+   Avvio:              primo pixel acceso in $0200
+   Premi un tasto:     spostamento di 1 (Left/Right) o 16 (Up/Down)
+   Rilascio:           puoi muoverti di nuovo
+   Bordi orizzontali:  il pixel riappare dall’altro lato della stessa riga
+
+   Compilazione (necroassembler):
+   python -m necroassembler.cpu.mos6502 main.asm main.bin
+
+   Progetto didattico - Movimento pixel in Assembly MOS 6502
+--------------------------------------------------------------
