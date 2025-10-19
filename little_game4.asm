@@ -79,13 +79,13 @@ chk_right:
 
     INX                 ; this set X = X + 1
  
-    ; se abbiamo sforato la colonna 15 -> colonna torna 0 e "risale" di una riga
+    ; if the pixel goes over 15 -> back to column 0 e and one row up
     TXA
-    AND #$0F            ; A = (X & 0x0F)
-    BNE right_done      ; se != 0, nessuno sforo a destra
+    AND #$0F            ; A = (X & 0x0F)=0 should  be like X%16=0 check
+    BNE right_done      ;no right edge
 
-    ; sforo a destra: X = X - 32 (0x20)
-    TXA                 ; riprendi X intero in A
+    ; back to the left part with: X = X - 16
+    TXA                 
     SEC
     SBC #$10
     TAX
@@ -110,14 +110,14 @@ chk_left:
 
     DEX                 ; this set position X = X - 1
 
-    ; se abbiamo sforato la colonna 0 -> colonna diventa 15 e "scende" di una riga
+    ; if the pixel position goes under 0 -> back to column 15 e one wae down
     TXA
-    AND #$0F            ; A = (X & 0x0F)
+    AND #$0F            ; A = (X & 0x0F)=15  should  be like X%16=15 check
     CMP #$0F
-    BNE left_done       ; se != 0x0F, nessuno sforo a sinistra
+    BNE left_done       ; no left edge
 
-    ; sforo a sinistra: X = X + 32 (0x20)
-    TXA                 ; riprendi X intero in A
+    ; back from the right part with X = X + 16
+    TXA                 
     CLC
     ADC #$10
     TAX
