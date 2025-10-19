@@ -1,7 +1,7 @@
 ; ===== Pixel move U/D/L/R: one step per press =====
 ; X = current offset on page $0200
 ; Y = prevPressed flag (0 = no, 1 = yes)
-; Joypad/keyboard bits: Up=bit0, Down=bit1, Left=bit2, Right=bit3
+; Joypad bits: Up=bit0, Down=bit1, Left=bit2, Right=bit3
 
 .ORG $8000
 
@@ -22,11 +22,11 @@ loop:
     CPY #$00
     BNE skip_move      ; stop any move and jump to skip_move label
 
-; -------- DOWN (bit1) --------
+; -------- DOWN (bit1) --------  ;This operations call subroutines
     LDA $4000
     AND #%00000010
     BEQ chk_up
-    JSR clear_pixel
+    JSR clear_pixel  
     JSR move_down
     JSR turn_on_pixel
     JMP loop
