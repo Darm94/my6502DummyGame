@@ -1,8 +1,8 @@
-# NES-Style Pixel Movement in 6502 Assembly
+# Pixel Movement in 6502 Assembly with arrows keys
 
-A small educational exercise in MOS 6502 Assembly that demonstrates how to move a “pixel” (a memory cell) using the joypad.
+A small educational exercise in MOS 6502 Assembly that move a “pixel” (a memory cell) using the joypad.
 
-Includes: Up/Down/Left/Right movement, edge detection (one move per press), and a horizontal Pac-Man effect (wrap on the same row).
+Includes: Up/Down/Left/Right movement, press detection (one move per press), and a horizontal Pac-Man effect (wrap on the same row).
 
 ---
 
@@ -61,25 +61,32 @@ Each time you press a button:
 When X exceeds the 16th column (or goes below 0):
 
 - Right: if `(X & $0F) == 0` then `X = X - 16`
-- Left: if `(X & $0F) == 15` then `X = X + 16`
+- Left:  if `(X & $0F) == 15` then `X = X + 16`
 
 This keeps the pixel on the same row, simulating horizontal wrap-around.
+Vertically the pixel automatically restarts from the opposite side in the same column
 
 ---
+## Sources
+
+- [NesDev Wiki – 6502 CPU Architecture](https://www.nesdev.org/wiki/CPU)
+- [MOS 6502 Instruction Set Reference](https://www.masswerk.at/6502/6502_instruction_set.html)
+- [PyNecroassembler Project](https://pypi.org/project/necroassembler/)
+- [Programming the 6502 – Easy 8-bit Assembly Guide](https://skilldrick.github.io/easy6502/)
 
 --------------------------------------------------------------
    Behavior Summary
    ----------------
 
-   Start:              first pixel lit at $0200  
-   Press a key:         move by 1 (Left/Right) or 16 (Up/Down)  
+   Start:               first pixel at $0200  
+   Press a key:         move by 1 bit (Left/Right) or 16 bit (Up/Down)  
    Release:             allows movement again  
-   Horizontal edges:    pixel reappears on the opposite side of the same row  
+   Horizontal and vertical edges:    pixel reappears on the opposite side of the same row and the same for the vertical edges in the same column
 
    Compilation (necroassembler):  
    python -m necroassembler.cpu.mos6502 main.asm main.bin
 
-Compilation with necroassembler:  
-python -m necroassembler.cpu.mos6502 main.asm main.bin
+   Tested on : Dummy 6502
+
 
 Purely educational project to understand the registers, logical operations, and vector handling of the MOS 6502 processor.
