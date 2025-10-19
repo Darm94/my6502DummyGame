@@ -1,4 +1,4 @@
-# NES-Style Pixel Movement in 6502 Assembly
+# Pixel Movement in 6502 Assembly with arrows keys
 
 A small educational exercise in MOS 6502 Assembly that move a “pixel” (a memory cell) using the joypad.
 
