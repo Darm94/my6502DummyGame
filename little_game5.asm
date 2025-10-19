@@ -73,7 +73,7 @@ skip_move:
 
 ; ==================== ROUTINES ==========================    
 
-clear_pixel:
+clear_pixel: ; turn off old pixel
     LDA #$00
     STA $0200,X
     RTS
@@ -117,7 +117,7 @@ move_left:              ; X = X - 1, wrap on same row
 no_wrap_l:
     RTS
 
-turn_on_pixel:
+turn_on_pixel:          ; turn on new pixel
     LDA #$02
     STA $0200,X
     LDY #$01            ; lock until release
